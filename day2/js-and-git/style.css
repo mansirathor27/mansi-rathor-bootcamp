@@ -149,3 +149,15 @@ footer {
   --text: #f9fafb;
   --white: #111827;
 }
+
+.github {
+  text-align: center;
+}
+
+#result {
+  margin-top: 20px;
+}
+
+#result img {
+  border-radius: 50%;
+}
