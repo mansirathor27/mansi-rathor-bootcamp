@@ -12,28 +12,32 @@ toggleBtn.addEventListener("click", () => {
 
 
 async function getUser() {
-  const username = document.getElementById("username").value;
+  const usernameInput = document.getElementById("username");
   const resultDiv = document.getElementById("result");
+
+  const username = usernameInput.value.trim();
 
   if (!username) {
     resultDiv.innerHTML = "Please enter a username";
     return;
   }
 
+  resultDiv.innerHTML = "Loading...";
+
   try {
     const res = await fetch(`https://api.github.com/users/${username}`);
     const data = await res.json();
 
-    if (data.message === "Not Found") {
-      resultDiv.innerHTML = "User not found ❌";
+    if (!res.ok) {
+      resultDiv.innerHTML = `Error: ${data.message}`;
       return;
     }
 
     resultDiv.innerHTML = `
       <img src="${data.avatar_url}" width="100" />
-      <h3>${data.name || "No Name"}</h3>
+      <h3>${data.name || data.login}</h3>
       <p>${data.bio || "No bio available"}</p>
-      <p>Followers: ${data.followers}</p>
+      <p>Followers: ${data.followers ?? 0}</p>
       <a href="${data.html_url}" target="_blank">View Profile</a>
     `;
   } catch (error) {
