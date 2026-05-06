@@ -1,0 +1,23 @@
+import React from "react";
+import TodoItem from "./TodoItem";
+
+function TodoList({ todos, deleteTodo, toggleComplete }) {
+  return (
+    <div>
+      {todos.length === 0 ? (
+        <p>No tasks yet</p>  // Conditional Rendering
+      ) : (
+        todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            deleteTodo={deleteTodo}
+            toggleComplete={toggleComplete}
+          />
+        ))
+      )}
+    </div>
+  );
+}
+
+export default TodoList;
