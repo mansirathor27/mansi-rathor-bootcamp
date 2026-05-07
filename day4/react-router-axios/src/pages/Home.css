@@ -1,0 +1,31 @@
+.home {
+  padding: 20px;
+}
+
+.posts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.post-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: 0.2s;
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+}
+
+.post-card h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.post-card p {
+  font-size: 14px;
+  color: gray;
+}
