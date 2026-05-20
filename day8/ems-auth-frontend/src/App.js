@@ -1,36 +1,36 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Employees from './pages/Employees';
+import Departments from './pages/Departments';
+import Navbar from './components/Navbar';
+import './App.css';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsAuthenticated(!!localStorage.getItem('token'));
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
   return (
-    <BrowserRouter>
-      <nav className="flex justify-between items-center px-6 py-4 bg-slate-800 text-white shadow">
-        <h1 className="text-xl font-bold">EMS</h1>
-
-        <div className="space-x-4">
-          <Link to="/register" className="hover:text-blue-400">Register</Link>
-          <Link to="/login" className="hover:text-blue-400">Login</Link>
-          <Link to="/dashboard" className="hover:text-blue-400">Dashboard</Link>
-        </div>
-      </nav>
-
-      <Routes>
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+    <Router>
+      <div className="App">
+        {isAuthenticated && <Navbar onLogout={() => setIsAuthenticated(false)} />}
+        <Routes>
+          <Route path="/login" element={<Login onLoginSuccess={() => setIsAuthenticated(true)} />} />
+          <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
+          <Route path="/employees" element={isAuthenticated ? <Employees /> : <Navigate to="/login" />} />
+          <Route path="/departments" element={isAuthenticated ? <Departments /> : <Navigate to="/login" />} />
+          <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
